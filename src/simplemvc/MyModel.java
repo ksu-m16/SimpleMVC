@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
 public class MyModel implements IModel {
-	File f = new File("E:\\MyDocuments\\Eclipse\\SimpleMVC\\data.txt");
+	File f = new File(".\\data.txt");
 	
 	public int getNumber() throws IOException{
 	BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f)));

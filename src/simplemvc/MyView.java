@@ -1,21 +1,29 @@
 package simplemvc;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
 import java.awt.GridBagLayout;
 import javax.swing.JButton;
+
+import java.awt.Color;
 import java.awt.GridBagConstraints;
-import javax.swing.JTextArea;
 import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
-
 import javax.swing.JTextField;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.InputMethodListener;
+import java.awt.event.InputMethodEvent;
 
 public class MyView extends JFrame {
 
@@ -23,22 +31,20 @@ public class MyView extends JFrame {
 
 	public void setController(IController controller) {
 		this.controller = controller;
-//		this.model = this.controller.getModel();
 	}
 
 	private JPanel contentPane;
-	private JTextField txtNumber;
+	private JTextField jtfNumber;
 
 	/**
 	 * Launch the application.
 	 */
-//	public static void main(String[] args) {
 	public void run() {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {
-					MyView frame = new MyView();
-					frame.setVisible(true);
+				try {					
+					initialize();
+					MyView.this.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -46,47 +52,78 @@ public class MyView extends JFrame {
 		});
 	}
 
+	public void initialize() {
+		jtfNumber.setText(controller.getValue());
+	}
+	
 	/**
 	 * Create the frame.
 	 */
 	public MyView() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 354, 96);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
-		gbl_contentPane.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_contentPane.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPane.columnWidths = new int[]{0, 0};
+		gbl_contentPane.rowHeights = new int[]{0, 0, 0};
+		gbl_contentPane.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+		gbl_contentPane.rowWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
 		
-		JButton btnRead = new JButton("Set!");
-		btnRead.addMouseListener(new MouseAdapter() {
+		jtfNumber = new JTextField();		
+
+		jtfNumber.getDocument().addDocumentListener(new DocumentListener() {			
+			public void update() {
+				if (controller.checkValue(jtfNumber.getText())) {
+					jtfNumber.setBackground(Color.WHITE);
+				} else {
+					jtfNumber.setBackground(Color.RED);					
+				}								
+			}			
 			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				controller.setValue(MyView.this.txtNumber.getText());
-			}
+			public void removeUpdate(DocumentEvent e) { update(); }			
+			@Override
+			public void insertUpdate(DocumentEvent e) { update(); }			
+			@Override
+			public void changedUpdate(DocumentEvent e) { update(); }
 		});
 		
-		txtNumber = new JTextField();
-		txtNumber.setText(controller.getValue());
-
-		GridBagConstraints gbc_txtNumber = new GridBagConstraints();
-		gbc_txtNumber.insets = new Insets(0, 0, 5, 5);
-		gbc_txtNumber.fill = GridBagConstraints.HORIZONTAL;
-		gbc_txtNumber.gridx = 5;
-		gbc_txtNumber.gridy = 3;
-		contentPane.add(txtNumber, gbc_txtNumber);
-		txtNumber.setColumns(10);
-		GridBagConstraints gbc_btnRead = new GridBagConstraints();
-		gbc_btnRead.gridheight = 3;
-		gbc_btnRead.gridwidth = 3;
-		gbc_btnRead.insets = new Insets(0, 0, 0, 5);
-		gbc_btnRead.gridx = 4;
-		gbc_btnRead.gridy = 4;
-		contentPane.add(btnRead, gbc_btnRead);
+		GridBagConstraints gbc_jtfNumber = new GridBagConstraints();
+		gbc_jtfNumber.insets = new Insets(0, 0, 5, 0);
+		gbc_jtfNumber.fill = GridBagConstraints.HORIZONTAL;
+		gbc_jtfNumber.gridx = 0;
+		gbc_jtfNumber.gridy = 0;
+		contentPane.add(jtfNumber, gbc_jtfNumber);
+		jtfNumber.setColumns(10);
+		
+		JButton jbSet = new JButton("Ksu mnu ne vsegda ponimaet(((, chto delat?");
+		
+		//SEE: action listener should be used here
+		jbSet.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (!controller.checkValue(jtfNumber.getText())) {
+					JOptionPane.showMessageDialog(MyView.this, "Invalid number value/format");
+					return;
+				}
+				controller.setValue(jtfNumber.getText());
+			}
+		});
+		/*
+		jbSet.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				controller.setValue(MyView.this.jtfNumber.getText());
+			}
+		});
+		*/
+		
+		GridBagConstraints gbc_jbSet = new GridBagConstraints();
+		gbc_jbSet.fill = GridBagConstraints.HORIZONTAL;
+		gbc_jbSet.gridx = 0;
+		gbc_jbSet.gridy = 1;
+		contentPane.add(jbSet, gbc_jbSet);
 	}
 
 }
