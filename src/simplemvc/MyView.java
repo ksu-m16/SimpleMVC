@@ -28,7 +28,7 @@ public class MyView extends JFrame {
 
 	public void setController(IController controller) {
 		this.controller = controller;
-		this.model = this.controller.getModel();
+//		this.model = this.controller.getModel();
 	}
 
 	private JPanel contentPane;
