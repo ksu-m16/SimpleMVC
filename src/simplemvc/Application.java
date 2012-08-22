@@ -9,10 +9,9 @@ public class Application {
 		
 		IModel m = new MyModel();
 		MyView v = new MyView();
-		IController c = new MyController();
+		MyController c = new MyController();
 		c.setModel(m);
 		v.setController(c);
-		
 		v.run();
 				
 	}

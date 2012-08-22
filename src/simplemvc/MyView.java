@@ -19,12 +19,7 @@ import javax.swing.JTextField;
 
 public class MyView extends JFrame {
 
-	private IController controller = new MyController();
-	private IModel model = new MyModel();
-	
-	public IController getController() {
-		return controller;
-	}
+	private IController controller;
 
 	public void setController(IController controller) {
 		this.controller = controller;
@@ -71,25 +66,13 @@ public class MyView extends JFrame {
 		btnRead.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				try {
-					model.setNumber(Integer.parseInt(MyView.this.txtNumber.getText()));
-				} catch (NumberFormatException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				controller.setValue(MyView.this.txtNumber.getText());
 			}
 		});
 		
 		txtNumber = new JTextField();
-		try {
-			txtNumber.setText(String.valueOf(model.getNumber()));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		txtNumber.setText(controller.getValue());
+
 		GridBagConstraints gbc_txtNumber = new GridBagConstraints();
 		gbc_txtNumber.insets = new Insets(0, 0, 5, 5);
 		gbc_txtNumber.fill = GridBagConstraints.HORIZONTAL;
