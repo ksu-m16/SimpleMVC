@@ -27,7 +27,7 @@ import java.awt.event.InputMethodEvent;
 
 public class MyView extends JFrame {
 
-	private IController controller;
+	private IController controller ;
 
 	public void setController(IController controller) {
 		this.controller = controller;
@@ -48,6 +48,7 @@ public class MyView extends JFrame {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+				
 			}
 		});
 	}
@@ -98,7 +99,7 @@ public class MyView extends JFrame {
 		contentPane.add(jtfNumber, gbc_jtfNumber);
 		jtfNumber.setColumns(10);
 		
-		JButton jbSet = new JButton("Ksu mnu ne vsegda ponimaet(((, chto delat?");
+		JButton jbSet = new JButton("-_-");
 		
 		//SEE: action listener should be used here
 		jbSet.addActionListener(new ActionListener() {
